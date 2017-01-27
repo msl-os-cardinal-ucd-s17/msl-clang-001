@@ -3,5 +3,5 @@ project(project1)
 
 set(CMAKE_C_STANDARD 99)
 
-set(SOURCE_FILES main_jmcallister.c)
+set(SOURCE_FILES main.c)
 add_executable(project1 ${SOURCE_FILES})

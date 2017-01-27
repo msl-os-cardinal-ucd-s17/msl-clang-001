@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // NOTE: For now, the number of words & maximum lengths of each word is predefined.
 // TODO: Dynamically reallocate 2D array as file is parsed word-by-word (move semantics instead of copying?!)
@@ -8,17 +9,28 @@
 const int NUMBER_OF_WORDS = 7;
 const int MAX_WORD_LENGTH = 20;
 
+//The basic definition of the nodes in the Binary Tree
+typedef struct node {
+    char*data;
+    struct node*left;
+    struct node*right;
+    int count;
+} str_node;
+
 /* ERROR_FLAG CODES:
  *      0 => No errors.
  *      1 => File I/O errors.
  *      2 => main argument count error.
- *      Add more when necessary.
+ *      Specify more when necessary.
  */
-
 int ERROR_FLAG = 0;
+
+//Note, for our purpose there aren't any exceptions that we could handle that I can think of except SEGFAULT, which we have been careful to check for,
+//so the current error handling seems to suffice...
 
 char** readFile(char* fileLocation) {
     FILE* fp = NULL;
+    char**wordArray = NULL;
 
     // NOTE: fopen looks for the file in one of two ways:
     //      1) An explicit path to the file (e.g. "C:\wordlist.txt")
@@ -26,18 +38,18 @@ char** readFile(char* fileLocation) {
     //      You will need to copy the supplied wordlist.txt file to wherever it is convenient
     //            (either in your clone of the cmake-build folder for an implicit search,
     //             or to anywhere else for an explicit search).
-
     fp = fopen(fileLocation, "r");
 
+    //This checks to make sure the file was successfully loaded (fopen() returns a NULL pointer if unsuccessful)
     if (fp == NULL) {
         return NULL;
     }
 
     // TODO: Potentially replace with single-line malloc/free & use pointer arithmetic for navigation.
     // TODO: Determine the effects of having a 2D array allocated as such being utilized in subscript format in other functions (is it even possible?)
-    char** wordArray = (char**)malloc(NUMBER_OF_WORDS * sizeof(char*));
+    wordArray = (char **) malloc(NUMBER_OF_WORDS * sizeof(char *));
     for (int i = 0; i < NUMBER_OF_WORDS; ++i) {
-        wordArray[i] = (char*)malloc(MAX_WORD_LENGTH * sizeof(char));
+        wordArray[i] = (char *) malloc(MAX_WORD_LENGTH * sizeof(char));
     }
 
     int i = 0;
@@ -49,15 +61,32 @@ char** readFile(char* fileLocation) {
     }
 
     fclose(fp);
-
     return wordArray;
 }
 
-/* main USAGE NOTES:
- *  Two arguments handled by main:
- *      1) Path to binary after file is built (i.e. simply launching the program produces an argument)
- *      2) Path to text file containing space- or newline-delimited words.
- */
+//Takes argument of the input string and either the left/right pointer of the parent
+void insertNode(char* string, str_node*leafptr) {
+    //Declare a dynamically created node
+    str_node * tmpnode = NULL;
+    tmpnode = malloc(sizeof(str_node));
+
+    //Ensure that the node was created successfully
+    if(tmpnode != NULL) {
+        //Copy the string data instead of implicit sharing or move semantics...
+        strcpy(tmpnode->data, string);
+
+        //Set the node pointers to NULl since we followed the paradigm of adding new nodes beyond the leaf without rearranging
+        tmpnode->left  = NULL;
+        tmpnode->right = NULL;
+
+        //Set the count to an intial value
+        tmpnode->count = 1;
+
+        //Allow the parent to point to this newly created node
+        leafptr = tmpnode;
+    }
+}
+
 int main(int argc, char *argv[]) {
     printf("Number of arguments: %d\n", argc);
     if (argc != 2) {
@@ -68,6 +97,7 @@ int main(int argc, char *argv[]) {
     returnedArray = readFile(argv[1]);
 
     if (returnedArray != NULL) {
+        // Check to see that returnedArray was properly returned.
         for (int i = 0; i < NUMBER_OF_WORDS; ++i) {
             if (returnedArray[i] != NULL) {
                 printf("%s\n", returnedArray[i]);
@@ -75,8 +105,7 @@ int main(int argc, char *argv[]) {
         }
 
         // INSERT ARRAY PARSING FUNCTIONALITY HERE (use predefined globals for now to determine each dimension's length, if necessary)
-    }
-    else {
+    } else {
         ERROR_FLAG = 1;
     }
 
@@ -96,3 +125,5 @@ int main(int argc, char *argv[]) {
 
     return ERROR_FLAG;
 }
+
+// TODO: Determine the proper place to free memory...
