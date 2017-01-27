@@ -53,7 +53,6 @@ int main(int argc, char *argv[]) {
     returnedArray = readFile(argv[1]);
 
     if (returnedArray != NULL) {
-        // Check to see that returnedArray was properly returned.
         for (int i = 0; i < NUMBER_OF_WORDS; ++i) {
             if (returnedArray[i] != NULL) {
                 printf("%s\n", returnedArray[i]);
@@ -64,15 +63,16 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        // INSERT ARRAY PARSING FUNCTIONALITY HERE (use predefined globals for now to determine each dimension's length, if necessary)
+        if (ERROR_FLAG == 0) {
+            // INSERT ARRAY PARSING FUNCTIONALITY HERE (use predefined globals for now to determine each dimension's length, if necessary)
+        }
     }
     else {
         ERROR_FLAG = 1;
     }
 
     if (ERROR_FLAG == 1) {
-        printf("ERROR: returnedArray was NULL on usage.");
-        exit(1);
+        printf("ERROR: Either returnedArray itself is NULL, or one of its pointers is NULL.");
     }
 
     // TODO: Replace with the TODO's noted in the readFile function, if necessary for optimization.
@@ -85,5 +85,5 @@ int main(int argc, char *argv[]) {
         free(returnedArray);
     }
 
-    return 0;
+    return ERROR_FLAG;
 }
