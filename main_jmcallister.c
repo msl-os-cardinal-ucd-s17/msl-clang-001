@@ -43,6 +43,11 @@ char** readFile(char* fileLocation) {
     return wordArray;
 }
 
+/* USAGE NOTES:
+ *  Two arguments will be handled by main:
+ *      1) Path to binary after file is built (i.e. simply launching the program produces an argument)
+ *      2) Path to text file containing space- or newline-delimited words.
+ */
 int main(int argc, char *argv[]) {
     printf("Number of arguments: %d\n", argc);
     if (argc != 2) {
