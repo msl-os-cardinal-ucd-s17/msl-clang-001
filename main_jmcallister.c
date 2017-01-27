@@ -8,8 +8,14 @@
 const int NUMBER_OF_WORDS = 7;
 const int MAX_WORD_LENGTH = 20;
 
-int ERROR_FLAG = 0; // Let ERROR_FLAG = 0 when no NULL exceptions occur, and let ERROR_FLAG = 1 when NULL exceptions occur.
-// TODO: Substitute ERROR_FLAG for exception handling if it exists in some capacity in C.
+/* ERROR_FLAG CODES:
+ *      0 => No errors.
+ *      1 => File I/O errors.
+ *      2 => main argument count error.
+ *      Add more when necessary.
+ */
+
+int ERROR_FLAG = 0;
 
 char** readFile(char* fileLocation) {
     FILE* fp = NULL;
@@ -20,8 +26,12 @@ char** readFile(char* fileLocation) {
     //      You will need to copy the supplied wordlist.txt file to wherever it is convenient
     //            (either in your clone of the cmake-build folder for an implicit search,
     //             or to anywhere else for an explicit search).
-    //  TODO: Don't crash program if fileLocation not found...
+
     fp = fopen(fileLocation, "r");
+
+    if (fp == NULL) {
+        return NULL;
+    }
 
     // TODO: Potentially replace with single-line malloc/free & use pointer arithmetic for navigation.
     // TODO: Determine the effects of having a 2D array allocated as such being utilized in subscript format in other functions (is it even possible?)
@@ -43,8 +53,8 @@ char** readFile(char* fileLocation) {
     return wordArray;
 }
 
-/* USAGE NOTES:
- *  Two arguments will be handled by main:
+/* main USAGE NOTES:
+ *  Two arguments handled by main:
  *      1) Path to binary after file is built (i.e. simply launching the program produces an argument)
  *      2) Path to text file containing space- or newline-delimited words.
  */
@@ -52,7 +62,7 @@ int main(int argc, char *argv[]) {
     printf("Number of arguments: %d\n", argc);
     if (argc != 2) {
         printf("ERROR: Illegal number of arguments.\n");
-        exit(1);
+        exit(2);
     }
     char** returnedArray = NULL;
     returnedArray = readFile(argv[1]);
@@ -62,22 +72,16 @@ int main(int argc, char *argv[]) {
             if (returnedArray[i] != NULL) {
                 printf("%s\n", returnedArray[i]);
             }
-            else {
-                ERROR_FLAG = 1;
-                break;
-            }
         }
 
-        if (ERROR_FLAG == 0) {
-            // INSERT ARRAY PARSING FUNCTIONALITY HERE (use predefined globals for now to determine each dimension's length, if necessary)
-        }
+        // INSERT ARRAY PARSING FUNCTIONALITY HERE (use predefined globals for now to determine each dimension's length, if necessary)
     }
     else {
         ERROR_FLAG = 1;
     }
 
     if (ERROR_FLAG == 1) {
-        printf("ERROR: Either returnedArray itself is NULL, or one of its pointers is NULL.");
+        printf("ERROR: %s could not be found.", argv[1]);
     }
 
     // TODO: Replace with the TODO's noted in the readFile function, if necessary for optimization.
