@@ -11,9 +11,9 @@ const int MAX_WORD_LENGTH = 20;
 
 //The basic definition of the nodes in the Binary Tree
 typedef struct node {
-    char*data;
-    struct node*left;
-    struct node*right;
+    char* data;
+    struct node* left;
+    struct node* right;
     int count;
 } str_node;
 
@@ -65,7 +65,7 @@ char** readFile(char* fileLocation) {
 }
 
 //Takes argument of the input string and either the left/right pointer of the parent
-void insertNode(char* string, str_node*leafptr) {
+void insertNode(char* string, str_node* leafptr) {
     //Declare a dynamically created node
     str_node * tmpnode = NULL;
     tmpnode = malloc(sizeof(str_node));
@@ -86,6 +86,54 @@ void insertNode(char* string, str_node*leafptr) {
         leafptr = tmpnode;
     }
 }
+
+
+void searchTree(char* word, str_node* root) {
+    /*
+     * This function recursively searches the binary tree for the given word. If the word is found then
+     * the count for that word is incremented. If not found then the word is added to the tree
+     */
+
+
+    if (root == NULL) {
+        // check to see if the tree is empty, create root node if so
+        insertNode(word, root);
+    }
+
+    int cmpr;
+    cmpr = strcmp(word, root->data); // compare the search word with the word at current node
+
+    if (cmpr < 0) {
+        // search word must be alphabetically earlier, recursively search left sub-tree
+
+        if (root->left == NULL) {
+            // insert new node
+            insertNode(word, root->left);
+        }
+        else {
+            // search left subtree
+            searchTree(word, root->left);
+        }
+    }
+
+    else if (cmpr > 0) {
+        // search word is alphabetically later, recursively search right sub-tree
+        if (root->right == NULL) {
+            // insert new node if there is no right child
+            insertNode(word, root->right);
+        }
+        else {
+            // search right subtree
+            searchTree(word, root->right);
+        }
+    }
+
+    else if (cmpr == 0){
+        // otherwise words must be equal, increment word count
+        root->count++;
+    }
+}
+
 
 int main(int argc, char *argv[]) {
     printf("Number of arguments: %d\n", argc);
