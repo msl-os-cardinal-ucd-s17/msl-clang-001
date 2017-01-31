@@ -25,8 +25,9 @@ typedef struct node {
  */
 int ERROR_FLAG = 0;
 
-//Note, for our purpose there aren't any exceptions that we could handle that I can think of except SEGFAULT, which we have been careful to check for,
-//so the current error handling seems to suffice...
+// Note, for our purpose there aren't any exceptions that we could handle that I can think
+// of except SEGFAULT, which we have been careful to check for,
+// so the current error handling seems to suffice...
 
 char** readFile(char* fileLocation) {
     FILE* fp = NULL;
@@ -64,75 +65,99 @@ char** readFile(char* fileLocation) {
     return wordArray;
 }
 
-//Takes argument of the input string and either the left/right pointer of the parent
-void insertNode(char* string, str_node* leafptr) {
-    //Declare a dynamically created node
-    str_node * tmpnode = NULL;
-    tmpnode = malloc(sizeof(str_node));
+//Takes argument of the input string and the root node of a tree/subtree
+void insertNode(char* word_, str_node** node_) {
 
-    //Ensure that the node was created successfully
-    if(tmpnode != NULL) {
+    /*
+     * This function recursively visits the nodes of the binary tree and either creates
+     * a new node if the word is not found, or increments the word count if a node is
+     * found.
+     *
+     * NOTE: the node needs to be passed by reference in order to correctly assign the
+     *       parent pointer to the new node
+     */
+
+    int comparision;
+
+
+    if (node_ == NULL) {
+        // we have reached the end of a tree branch which means a new word needs to be
+        // inserted
+        // Allocate memory for the new node and assign the location to leafptr
+
+        // Dynamically declare a new node
+        str_node *tmpnode = NULL;
+
+        tmpnode = malloc(sizeof(str_node));
+
         //Copy the string data instead of implicit sharing or move semantics...
-        strcpy(tmpnode->data, string);
+        strcpy(tmpnode->data, word_);
 
         //Set the node pointers to NULl since we followed the paradigm of adding new nodes beyond the leaf without rearranging
-        tmpnode->left  = NULL;
+        tmpnode->left = NULL;
         tmpnode->right = NULL;
 
         //Set the count to an intial value
         tmpnode->count = 1;
 
-        //Allow the parent to point to this newly created node
-        leafptr = tmpnode;
+        // Allow the parent node to point to the newly created node
+        *node_ = tmpnode;
     }
+
+    // Otherwise, compare value to the current node
+    else {
+        comparison = strcmp(word_, (*node_)->data));
+
+        if (comparision == 0) {
+            // if words are the same, increment count
+            (*node_)->count++;
+        }
+        else if (comparison < 0) {
+            // enter the left subtree
+            insertNode( word_, (*node_)->left);
+        }
+        else {
+            // enter the right subtree
+            insertNode(word_, (*node_)->right);
+        }
+    }
+
+    return;
 }
 
 
-void searchTree(char* word, str_node* root) {
+
+void printTree(str_node *root) {
     /*
-     * This function recursively searches the binary tree for the given word. If the word is found then
-     * the count for that word is incremented. If not found then the word is added to the tree
+     * Prints the tree of words in-order along with the count of each word
      */
 
-
-    if (root == NULL) {
-        // check to see if the tree is empty, create root node if so
-        insertNode(word, root);
+    if (root != NULL) {
+        printTree(root->left);
+        printf("%s %d\n", root->data, root->count);
+        printTree(root->right);
     }
 
-    int cmpr;
-    cmpr = strcmp(word, root->data); // compare the search word with the word at current node
-
-    if (cmpr < 0) {
-        // search word must be alphabetically earlier, recursively search left sub-tree
-
-        if (root->left == NULL) {
-            // insert new node
-            insertNode(word, root->left);
-        }
-        else {
-            // search left subtree
-            searchTree(word, root->left);
-        }
-    }
-
-    else if (cmpr > 0) {
-        // search word is alphabetically later, recursively search right sub-tree
-        if (root->right == NULL) {
-            // insert new node if there is no right child
-            insertNode(word, root->right);
-        }
-        else {
-            // search right subtree
-            searchTree(word, root->right);
-        }
-    }
-
-    else if (cmpr == 0){
-        // otherwise words must be equal, increment word count
-        root->count++;
-    }
 }
+
+
+//void deleteTree(str_node* node_) {
+//    /*
+//     * This function frees all the memory allocated in the tree
+//     */
+//
+//    if (node_->left != NULL) {
+//        deleteTree(node_->left);
+//    }
+//
+//    if (node_->right != NULL) {
+//        deleteTree(node_->right);
+//    }
+//
+//    free(node_);
+//
+//}
+
 
 
 int main(int argc, char *argv[]) {
@@ -141,6 +166,8 @@ int main(int argc, char *argv[]) {
         printf("ERROR: Illegal number of arguments.\n");
         exit(2);
     }
+
+
     char** returnedArray = NULL;
     returnedArray = readFile(argv[1]);
 
