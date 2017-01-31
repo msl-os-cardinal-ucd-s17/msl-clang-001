@@ -11,7 +11,7 @@ const int MAX_WORD_LENGTH = 20;
 
 //The basic definition of the nodes in the Binary Tree
 typedef struct node {
-    char* data;
+    char data[20]; // changed from char* to char []
     struct node* left;
     struct node* right;
     int count;
@@ -80,7 +80,7 @@ void insertNode(char* word_, str_node** node_) {
     int comparison;
 
 
-    if (node_ == NULL) {
+    if (*node_ == NULL) {
         // we have reached the end of a tree branch which means a new word needs to be
         // inserted
         // Allocate memory for the new node and assign the location to leafptr
@@ -127,38 +127,28 @@ void insertNode(char* word_, str_node** node_) {
 }
 
 
-
-void printTree(str_node *root) {
+void printAndDelete(str_node **node_) {
     /*
-     * Prints the tree of words in-order along with the count of each word
+     * This function prints the tree and frees all the memory
      */
 
-    if (root != NULL) {
-        printTree(root->left);
-        printf("%s %d\n", root->data, root->count);
-        printTree(root->right);
+    // Try to visit left branch
+    if ((*node_)->left != NULL) {
+        printAndDelete(&(*node_)->left);
     }
 
+    // Try to visit right branch
+    if ((*node_)->right != NULL) {
+        printAndDelete(&(*node_)->right);
+    }
+
+    // Print the word and word count
+    printf("%s %d\n", (*node_)->data, (*node_)->count);
+
+    // Free memory
+    free(*node_);
+
 }
-
-
-//void deleteTree(str_node* node_) {
-//    /*
-//     * This function frees all the memory allocated in the tree
-//     */
-//
-//    if (node_->left != NULL) {
-//        deleteTree(node_->left);
-//    }
-//
-//    if (node_->right != NULL) {
-//        deleteTree(node_->right);
-//    }
-//
-//    free(node_);
-//
-//}
-
 
 
 int main(int argc, char *argv[]) {
@@ -168,38 +158,73 @@ int main(int argc, char *argv[]) {
         exit(2);
     }
 
+//=======================================================
 
-    char** returnedArray = NULL;
-    returnedArray = readFile(argv[1]);
+    /*
+     * I just added this loop in to read the file and test out the insertNode function. I
+     * wasn't sure of the best approach to integrating the readFile() function with what I was
+     * trying to implement. This appears to at least show that the program is working correctly
+     * though.
+     */
 
-    if (returnedArray != NULL) {
-        // Check to see that returnedArray was properly returned.
-        for (int i = 0; i < NUMBER_OF_WORDS; ++i) {
-            if (returnedArray[i] != NULL) {
-                printf("%s\n", returnedArray[i]);
-            }
-        }
+    // Open the file
+    char *fileLocation = argv[1];
+    FILE* fp = NULL;
+    fp = fopen(fileLocation, "r");
 
-        // INSERT ARRAY PARSING FUNCTIONALITY HERE (use predefined globals for now to determine each dimension's length, if necessary)
-    } else {
-        ERROR_FLAG = 1;
+    char testWord[MAX_WORD_LENGTH];
+    str_node *rootNode = NULL;
+
+    size_t length; // allocate variable for the length of each word
+
+    while(fgets(testWord, MAX_WORD_LENGTH, fp) != NULL) {
+
+        // get length of string
+        length = strlen(testWord);
+        testWord[length - 1] = '\0'; // remove newline from the string
+
+        // Insert the new word into the tree (or increment count if it is already present)
+        insertNode(testWord, &rootNode);
     }
 
-    if (ERROR_FLAG == 1) {
-        printf("ERROR: %s could not be found.", argv[1]);
-    }
+    // Print tree and delete dynamically allocated memory
+    printAndDelete(&rootNode);
 
-    // TODO: Replace with the TODO's noted in the readFile function, if necessary for optimization.
-    if (returnedArray != NULL) {
-        for (int i = 0; i < NUMBER_OF_WORDS; ++i) {
-            if (returnedArray[i] != NULL) {
-                free(returnedArray[i]);
-            }
-        }
-        free(returnedArray);
-    }
+//=======================================================
 
-    return ERROR_FLAG;
+
+//    char** returnedArray = NULL;
+//    returnedArray = readFile(argv[1]);
+//
+//    if (returnedArray != NULL) {
+//        // Check to see that returnedArray was properly returned.
+//        for (int i = 0; i < NUMBER_OF_WORDS; ++i) {
+//            if (returnedArray[i] != NULL) {
+//                printf("%s\n", returnedArray[i]);
+//            }
+//        }
+//
+//        // INSERT ARRAY PARSING FUNCTIONALITY HERE (use predefined globals for now to determine each dimension's length, if necessary)
+//    } else {
+//        ERROR_FLAG = 1;
+//    }
+//
+//    if (ERROR_FLAG == 1) {
+//        printf("ERROR: %s could not be found.", argv[1]);
+//    }
+//
+//    // TODO: Replace with the TODO's noted in the readFile function, if necessary for optimization.
+//    if (returnedArray != NULL) {
+//        for (int i = 0; i < NUMBER_OF_WORDS; ++i) {
+//            if (returnedArray[i] != NULL) {
+//                free(returnedArray[i]);
+//            }
+//        }
+//        free(returnedArray);
+//    }
+//
+//    return ERROR_FLAG;
+
 }
 
 // TODO: Determine the proper place to free memory...
