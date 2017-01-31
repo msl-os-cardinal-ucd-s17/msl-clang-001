@@ -77,7 +77,7 @@ void insertNode(char* word_, str_node** node_) {
      *       parent pointer to the new node
      */
 
-    int comparision;
+    int comparison;
 
 
     if (node_ == NULL) {
@@ -106,19 +106,20 @@ void insertNode(char* word_, str_node** node_) {
 
     // Otherwise, compare value to the current node
     else {
-        comparison = strcmp(word_, (*node_)->data));
 
-        if (comparision == 0) {
+        comparison = strcmp(word_, (*node_)->data);
+
+        if (comparison == 0) {
             // if words are the same, increment count
             (*node_)->count++;
         }
         else if (comparison < 0) {
             // enter the left subtree
-            insertNode( word_, (*node_)->left);
+            insertNode(word_, &(*node_)->left);
         }
         else {
             // enter the right subtree
-            insertNode(word_, (*node_)->right);
+            insertNode(word_, &(*node_)->right);
         }
     }
 
