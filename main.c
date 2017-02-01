@@ -208,7 +208,7 @@ int main(int argc, const char *argv[]) {
             printf("I/O ERROR: Cannot read provided file path.\n");
         }
         else {
-            printf("ERROR: File is empty or begins with illegal characters.");
+            printf("ERROR: File is empty or begins with illegal characters.\n");
         }
         exit(errorState);
     }
