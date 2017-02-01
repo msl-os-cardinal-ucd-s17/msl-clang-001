@@ -92,7 +92,7 @@ int insertNode(char* inputWord, str_node** currentNodePtr) {
 
         if (comparison == 0) {
             // if words are the same, increment count
-            ((*currentNodePtr)->count)++;
+            ++((*currentNodePtr)->count);
         }
         else if (comparison < 0) {
             // enter the left subtree
