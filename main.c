@@ -14,6 +14,7 @@
  *          PATH_TO_FILE: Quotation-mark enclosed string directing to a text file containing the desired words.
  *              Path may be explicit (e.g. C:\wordlist.txt)
  *              ...or implicit if the file is located in the same folder as the executable (e.g. .\wordlist.txt)
+ *              The list of words may be space-separated or newline-separated.
  */
 
 #include <stdio.h>
