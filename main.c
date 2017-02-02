@@ -15,6 +15,9 @@
  *              Path may be explicit (e.g. C:\wordlist.txt)
  *              ...or implicit if the file is located in the same folder as the executable (e.g. .\wordlist.txt)
  *              The list of words may be space-separated or newline-separated.
+ *
+ *    The program will construct a lexicographically sorted binary tree from the user-specified wordlist
+ *    and output the concordance.
  */
 
 #include <stdio.h>
@@ -107,20 +110,20 @@ int insertNode(char* inputWord, str_node** currentNodePtr) {
     return 0;
 }
 
-// This function prints the tree and frees all the memory through a post-order traversal.
+// This function prints the tree and frees all the memory through an in-order traversal.
 void printAndDelete(str_node **node_) {
     // Try to visit left branch
     if ((*node_)->left != NULL) {
         printAndDelete(&((*node_)->left));
     }
 
+    // Print the word and word count
+    printf("%s %d\n", (*node_)->word, (*node_)->count);
+
     // Try to visit right branch
     if ((*node_)->right != NULL) {
         printAndDelete(&((*node_)->right));
     }
-
-    // Print the word and word count
-    printf("%s %d\n", (*node_)->word, (*node_)->count);
 
     // Free memory
     free((*node_)->word);
@@ -223,7 +226,7 @@ int main(int argc, const char *argv[]) {
     }
 
     printf("Construction of binary tree finished.\n"
-                   "\nNow printing each word of the tree & its count (post-order traversal):\n");
+                   "\nNow printing each word of the tree & its concordance (in-order traversal):\n");
 
     // Print tree and delete dynamically allocated memory
     printAndDelete(&root);
