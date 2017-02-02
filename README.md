@@ -14,23 +14,24 @@ struct node {
 };
 
 The count maintains the occurrences of the given words. The left and right pointers point to the left and right branches of the binary tree. 
-The program prints (post order traversal) all of the words and their associated occurrences from the given input. Example output of the program is seen below:
 
+The program constructs a lexicographically sorted binary tree and outputs its concordance through an in-order traversal. 
+Example output of the program is seen below:
 
 aid 1
-come 1
 all 1
-good 1
+come 1
 for 1
-men 1
+good 1
 is 1
-party 1
-of 1
-their 1
-to 2
-time1
-the 2
+men 1
 now 1
+of 1
+party 1
+the 2
+their 1
+time 1
+to 2
 
 The program handles many common error cases: corrupt, missing, or incorrect file paths, and not enough memory due to large input sizes.
 
