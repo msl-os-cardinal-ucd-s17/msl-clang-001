@@ -71,7 +71,7 @@ int insertNode(char* inputWord, str_node** currentNodePtr) {
     int comparison;
 
     if ((*currentNodePtr) == NULL) {
-        // we have reached the end of a tree branch which means a new word needs to be inserted
+        // We have reached the end of a tree branch which means a new word needs to be inserted
         // Allocate memory for the new node and assign the location to leafptr
 
         (*currentNodePtr) = (str_node*)malloc(sizeof(str_node));
