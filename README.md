@@ -18,6 +18,7 @@ The count maintains the occurrences of the given words. The left and right point
 The program constructs a lexicographically sorted binary tree and outputs its concordance through an in-order traversal. 
 Example output of the program is seen below:
 
+~~~~
 aid 1  
 all 1  
 come 1  
@@ -32,6 +33,7 @@ the 2
 their 1  
 time 1  
 to 2  
+~~~~
 
 The program handles many common error cases: corrupt, missing, or incorrect file paths, and not enough memory due to large input sizes.
 
