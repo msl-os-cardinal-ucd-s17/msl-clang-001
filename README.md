@@ -6,32 +6,32 @@ This program tackles the interesting and mainly pedagogical task of counting the
 
 The binary tree was implemented with the following simple node structure:
 
-struct node {
-    char* word;
-    str_node* left;
-    str_node* right;
-    int count;
-};
+struct node {  
+    char* word;  
+    str_node* left;  
+    str_node* right;  
+    int count;  
+};  
 
 The count maintains the occurrences of the given words. The left and right pointers point to the left and right branches of the binary tree. 
 
 The program constructs a lexicographically sorted binary tree and outputs its concordance through an in-order traversal. 
 Example output of the program is seen below:
 
-aid 1
-all 1
-come 1
-for 1
-good 1
-is 1
-men 1
-now 1
-of 1
-party 1
-the 2
-their 1
-time 1
-to 2
+aid 1  
+all 1  
+come 1  
+for 1  
+good 1  
+is 1  
+men 1  
+now 1  
+of 1  
+party 1  
+the 2  
+their 1  
+time 1  
+to 2  
 
 The program handles many common error cases: corrupt, missing, or incorrect file paths, and not enough memory due to large input sizes.
 
