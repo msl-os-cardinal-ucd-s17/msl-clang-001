@@ -52,6 +52,6 @@ If you encounter a bug, please read and determine if the problem or idea is not 
 
 Creators:
 
-This project was made possible by the joint efforts of Brett Gedvilas, Joshua McAllister,Rachel Popo, and David Ward. 
+This project was made possible by the joint efforts of Brett Gedvilas, Joshua McAllister, Rachel Popo, and David Ward. 
 
 (Last Revised 2/2/17)
