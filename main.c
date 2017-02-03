@@ -146,7 +146,7 @@ void printAndDelete(str_node **node_) {
  *          returns root pointer to lexicographically sorted binary tree.
  */
 
-str_node* createBinaryTreeFromFile(const char** fileLocation) {
+str_node* createBinaryTreeFromFile(char** fileLocation) {
     assert((fileLocation != NULL) && ((*fileLocation) != NULL));
     FILE* fp = NULL;
     str_node* root = NULL;
@@ -190,7 +190,7 @@ str_node* createBinaryTreeFromFile(const char** fileLocation) {
     return root;
 }
 
-int main(int argc, const char *argv[]) {
+int main(int argc, char **argv) {
     printf("Number of user-specified command-line arguments: %d\n\n", (argc-1));
     if (argc != 2) {
         printf("ERROR: Illegal number of arguments.\n");
@@ -231,5 +231,5 @@ int main(int argc, const char *argv[]) {
     // Print tree and delete dynamically allocated memory
     printAndDelete(&root);
 
-    return errorState;
+    exit(errorState);
 }

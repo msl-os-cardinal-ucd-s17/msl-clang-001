@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.6)
-project(inclass1)
+project(msl_clang_001)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES main.c)
-add_executable(inclass1 ${SOURCE_FILES})
+
+add_executable(msl_clang_001 ${SOURCE_FILES})
