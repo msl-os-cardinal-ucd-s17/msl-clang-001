@@ -4,7 +4,7 @@
  *      Rachel Popo
  *      David Ward
  * Date: 1-31-17
- * Class: CSCI 3453
+ * Class: CSCI 3453-001
  */
 
 /* PROGRAM USAGE:
