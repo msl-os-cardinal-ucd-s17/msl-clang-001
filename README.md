@@ -1,4 +1,4 @@
-# In-class Assignment 1:
+# In-class Assignment 1
 ## Building a lexicographically sorted binary tree
 
 About:
