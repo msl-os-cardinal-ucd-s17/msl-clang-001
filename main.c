@@ -111,18 +111,27 @@ int insertNode(char* inputWord, str_node** currentNodePtr) {
 }
 
 // This function prints the tree and frees all the memory through an in-order traversal.
-void printAndDelete(str_node **node_) {
+void printAndDelete(str_node **node_, FILE*fp) {
     // Try to visit left branch
     if ((*node_)->left != NULL) {
-        printAndDelete(&((*node_)->left));
+        printAndDelete(&((*node_)->left),fp);
     }
 
-    // Print the word and word count
-    printf("%s %d\n", (*node_)->word, (*node_)->count);
+    char* newLine;
+
+    //Determine what OS is running to handle carriage return differently
+#ifdef _WIN32
+    newLine = "\r\n";
+#else
+    newLine = "\n";
+#endif
+
+    //Write word to the file
+    fprintf(fp,"%s %s", (*node_)->word, newLine);
 
     // Try to visit right branch
     if ((*node_)->right != NULL) {
-        printAndDelete(&((*node_)->right));
+        printAndDelete(&((*node_)->right),fp);
     }
 
     // Free memory
@@ -189,6 +198,51 @@ str_node* createBinaryTreeFromFile(char** fileLocation) {
     fclose(fp);
     return root;
 }
+// This function generates an output file name based on the user given input file name
+char* generateOutputFileName(const char*infileName) {
+    //NOTE: Assumes that the input file name will ONLY contain two number characters at the end, followed by .txt file extension
+    //It safely handles numbers in other positions in the file name by keeping a count of the desired number
+    //of digit characters at the end (2) and by detecting if it reaches a '/' character
+
+    char outfileName [17] = "./myoutput";
+
+    //Allocate memory in heap so string persists after function returns
+    char* output = (char*)malloc(sizeof(char) * (17));
+
+    //Flag indicating that we passed a '.' character (file extension)
+    int passedDot = 0;
+
+    //Location to insert digits (right before '.' character
+    int index = 11;
+
+    //Keeps track of the number of digit characters appended to the input file name (assumes 2 is the max)
+    int count = 0;
+    int i = (strlen(infileName) - 1);
+
+    //Loop through all of the characters in the input file path name (working backwards, starting from end)
+    for(i; i >= 0; --i) {
+        if (infileName[i] == 0x2E) { //If character is '.'
+            passedDot = 1;
+        } else if((passedDot)&& (infileName[i] <= 0x39) && (infileName[i] >= 0x30) && (count < 2)) { //If character is 0-9
+            outfileName[index] = infileName[i];
+            --index;
+            ++count;
+        } else if(infileName[i] == 0x2F) { //Character is a '/' character
+            break;
+        }
+    }
+
+    //Append the .txt file extension
+    outfileName[15] = 't';
+    outfileName[14] = 'x';
+    outfileName[13] = 't';
+    outfileName[12] = '.';
+
+    //Copy the characters in outfileName to memory locations in heap
+    strcpy(output, outfileName);
+
+    return output;
+}
 
 int main(int argc, char **argv) {
     printf("Number of user-specified command-line arguments: %d\n\n", (argc-1));
@@ -205,6 +259,30 @@ int main(int argc, char **argv) {
     printf("Now constructing binary tree from provided list of words...\n");
     str_node* root = NULL;
     root = createBinaryTreeFromFile(&(argv[1]));
+
+    //Construct the output file name
+    char*outfileName;
+    outfileName = generateOutputFileName(argv[1]);
+
+    //Free the memory associated with the file path string, as it is no longer needed
+    free(outfileName);
+
+    //Open output file in read-only mode just to determine if file exists
+    FILE*ofp = fopen(outfileName, "r");
+
+    //Determine if the output file already exists, if so delete it
+    if (ofp){
+        //Close and Delete file
+        fclose(ofp);
+        remove(outfileName);
+
+        //Open the file in append mode so that recursive calls don't overwrite previous file writes
+        ofp = fopen(outfileName, "a");
+
+    }else{
+        //file doesn't exists, so open the file in append mode so that recursive calls don't overwrite previous file writes
+        ofp = fopen(outfileName, "a");
+    }
 
     if (root == NULL) {
         if (errorState == ERRNUM_IO) {
@@ -229,7 +307,7 @@ int main(int argc, char **argv) {
                    "\nNow printing each word of the tree & its concordance (in-order traversal):\n");
 
     // Print tree and delete dynamically allocated memory
-    printAndDelete(&root);
+    printAndDelete(&root,ofp);
 
     exit(errorState);
 }
