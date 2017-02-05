@@ -200,46 +200,79 @@ str_node* createBinaryTreeFromFile(char** fileLocation) {
 }
 // This function generates an output file name based on the user given input file name
 char* generateOutputFileName(const char*infileName) {
-    //NOTE: Assumes that the input file name will ONLY contain two number characters at the end, followed by .txt file extension
+    //NOTE: Assumes that the input file name will ONLY contain up to 5 number characters (e.g. input00001.txt) at the end, followed by .txt file extension
     //It safely handles numbers in other positions in the file name by keeping a count of the desired number
     //of digit characters at the end (2) and by detecting if it reaches a '/' character
-
-    char outfileName [17] = "./myoutput";
-
-    //Allocate memory in heap so string persists after function returns
-    char* output = (char*)malloc(sizeof(char) * (17));
 
     //Flag indicating that we passed a '.' character (file extension)
     int passedDot = 0;
 
-    //Location to insert digits (right before '.' character
-    int index = 11;
+    //Variable to store the size of the c-string of digits from input file name
+    int size = 5;
 
     //Keeps track of the number of digit characters appended to the input file name (assumes 2 is the max)
     int count = 0;
+
+    //Calculate and initialize loop variable
     int i = (strlen(infileName) - 1);
 
+    //String temporary that holds index string (up to 5 digits possible e.g. input02345.txt)
+    char indexStr [size];
+    indexStr[0] = 0x0;
+    indexStr[1] = 0x0;
+    indexStr[2] = 0x0;
+    indexStr[3] = 0x0;
+    indexStr[4] = 0x0;
+
     //Loop through all of the characters in the input file path name (working backwards, starting from end)
+    --size;
     for(i; i >= 0; --i) {
         if (infileName[i] == 0x2E) { //If character is '.'
             passedDot = 1;
-        } else if((passedDot)&& (infileName[i] <= 0x39) && (infileName[i] >= 0x30) && (count < 2)) { //If character is 0-9
-            outfileName[index] = infileName[i];
-            --index;
+        } else if((passedDot) && (infileName[i] <= 0x39) && (infileName[i] >= 0x30)) { //If character is 0-9
+            indexStr[size] = infileName[i];
+            //Move to the next index
+            --size;
+            //Increment the count of the number of digits in the input file name
             ++count;
         } else if(infileName[i] == 0x2F) { //Character is a '/' character
+            break;
+        } else if(passedDot) { //Encountered a character that isn't a digit
             break;
         }
     }
 
-    //Append the .txt file extension
-    outfileName[15] = 't';
-    outfileName[14] = 'x';
-    outfileName[13] = 't';
-    outfileName[12] = '.';
+    //Initialize an ouput c-string to the output file name + the number of index digits (stored in count variable)
+    char outStr [count + 14 + 1]; //Add 1 for null character
 
-    //Copy the characters in outfileName to memory locations in heap
-    strcpy(output, outfileName);
+    //Copy the string literal to the output array
+    strcpy(outStr, "./myoutput");
+
+    //Initialize loop variables
+    i=0;
+    size = 10;
+
+    //Loop through all of digit characters from input file name
+    for(i; i < 5; ++i) {
+        if(indexStr[i] != 0x0) {
+            outStr[size] = indexStr[i];
+            ++size;
+        }
+    }
+
+    //Allocate memory in heap so string  safely and defnitely persists after function returns
+    char* output = (char*)malloc(sizeof(char) * (count + 14 + 1));
+
+    //Append the file extension
+    size = count + 10;
+    outStr[size] = '.';
+    outStr[++size] = 't';
+    outStr[++size] = 'x';
+    outStr[++size] = 't';
+    outStr[++size] = 0x0;
+
+    //Copy the contents of the output array to a heap allocated memory locations
+    strcpy(output, outStr);
 
     return output;
 }
