@@ -1,5 +1,4 @@
 ## In-class Assignment 1: Building a lexicographically sorted binary tree
-------------------------------------------------------------------------------------
 
 ### About:
 This program tackles the interesting and mainly pedagogical [task](https://github.com/ivogeorg/msl-clang-001) of counting the occurrences of all the words in some input, with the constraint that the list of words isn't known in advance. This program efficiently maintains a unbalanced binary representation of the list of words. Each incoming word is placed into its proper position when it arrives. The tree nodes are maintained so that at any node the left subtree contains only words that are lexicographically less than the word at the node, and the right subtree contains only words that are greater. When inserting new nodes in an already partially constructed tree, the new nodes were inserted as leaves. This paradigm was maintained consistently. 
