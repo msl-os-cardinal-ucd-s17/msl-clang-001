@@ -53,7 +53,7 @@ If you encounter a bug, please read and determine if the problem or idea is not 
 
 ### Future Considerations and Limitations:
 
-As the program was written, it allows for the potential for grossly unbalanced binary trees, which expose inefficiencies in traversing and returning the word list in lexographical order. To improve this program, input could be taken and manipulated in "chunks" of words, instead of individually. These chunks could be randomized or sorted to provide a more balanced tree structure. However, future revisions to this program would analyze if a binary tree is the most suitable data structure. 
+As the program was written, it allows for the potential for grossly unbalanced binary trees, which expose inefficiencies in traversing and returning the word list in lexicographical order. To improve this program, input could be taken and manipulated in "chunks" of words, instead of individually. These chunks could be randomized or sorted to provide a more balanced tree structure. However, future revisions to this program would analyze if a binary tree is the most suitable data structure. 
 
 ### Creators:
 
