@@ -56,4 +56,4 @@ As the program was written, it allows for the potential for grossly unbalanced b
 
 ### Creators:
 
-This project was made possible by the joint efforts of **Brett Gedvilas, Joshua McAllister,Rachel Popo, and David Ward.**
+This project was made possible by the joint efforts of **Brett Gedvilas, Joshua McAllister, Rachel Popo, and David Ward.**
