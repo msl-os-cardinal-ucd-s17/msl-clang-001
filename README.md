@@ -13,9 +13,10 @@ The **binary tree** was implemented with the following simple node structure:
 	};
 
 The count maintains the occurrences of the given words. The left and right pointers point to the left and right branches of the binary tree. 
-The program prints (post order traversal) all of the words and their associated occurrences from the given input file to a text file (e.g. **.\myoutput01**), which matches the index of the input file. An example snippet from the output of the program is seen below:
+The program prints (post order traversal) all of the words and their associated occurrences from the given input file to a text file (e.g. **.\myoutput01**), which matches the index of the input file. 
 
-	Program Output:
+An example snippet from the output of the program is seen below:
+
 		aid 1
 		all 1
 		come 1
