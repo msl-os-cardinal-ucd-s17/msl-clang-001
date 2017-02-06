@@ -28,7 +28,7 @@ The program prints (post order traversal) all of the words and their associated 
 		party 1
 		the 2
 		their 1
-		time1
+		time 1
 		to 2
 
 The program handles many common error cases: corrupt, missing, or incorrect file paths, and not enough memory due to large input sizes. It also expands further on possible inputs than outlined in the [assignment](https://github.com/ivogeorg/msl-clang-001).
