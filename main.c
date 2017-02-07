@@ -225,7 +225,7 @@ char* generateOutputFileName(const char*infileName) {
         //Loop through all of the characters in the input file path name (working backwards, starting from end)
         --size;
         int endIndex = i;
-        char outFileName [strlen(infileName) + 1];
+        char outFileName [strlen(infileName) + 8];
         int startCopying =0;
 
         for (i; i >= 0; --i) {
@@ -282,7 +282,7 @@ char* generateOutputFileName(const char*infileName) {
         outFileName[++size] = 0x0;
 
         //Allocate memory in heap so string  safely and defnitely persists after function returns
-        char *output = (char *) malloc(sizeof(char) * (size));
+        char *output = (char *) malloc(sizeof(char) * (size + 1));
 
         //Copy the contents of the output array to a heap allocated memory locations
         strcpy(output, outFileName);
