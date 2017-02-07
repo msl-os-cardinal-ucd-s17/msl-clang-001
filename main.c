@@ -224,53 +224,68 @@ char* generateOutputFileName(const char*infileName) {
 
         //Loop through all of the characters in the input file path name (working backwards, starting from end)
         --size;
+        int endIndex = i;
+        char outFileName [strlen(infileName) + 1];
+        int startCopying =0;
+
         for (i; i >= 0; --i) {
-            if (infileName[i] == 0x2E) { //If character is '.'
-                passedDot = 1;
-            } else if ((passedDot) && (infileName[i] <= 0x39) && (infileName[i] >= 0x30)) { //If character is 0-9
-                indexStr[size] = infileName[i];
-                //Move to the next index
-                --size;
-                //Increment the count of the number of digits in the input file name
-                ++count;
-            } else if (infileName[i] == 0x2F) { //Character is a '/' character
-                break;
-            } else if (passedDot) { //Encountered a character that isn't a digit
-                break;
+            if (!startCopying) {
+                if (infileName[i] == 0x2E) { //If character is '.'
+                    passedDot = 1;
+                } else if ((passedDot) && (infileName[i] <= 0x39) && (infileName[i] >= 0x30)) { //If character is 0-9
+                    indexStr[size] = infileName[i];
+                    //Move to the next index
+                    --size;
+                    //Increment the count of the number of digits in the input file name
+                    ++count;
+                } else if (infileName[i] == 0x2F) { //Character is a '/' character
+                    startCopying = 1;
+                    endIndex = i;
+                }
+            } else {
+                outFileName[i] = infileName[i];
             }
         }
 
-        //Initialize an ouput c-string to the output file name + the number of index digits (stored in count variable)
-        char outStr[count + 14 + 1]; //Add 1 for null character
+        if(!startCopying) {
+            outFileName[0] = '.';
+            endIndex = 1;
+        }
 
-        //Copy the string literal to the output array
-        strcpy(outStr, "./myoutput");
+        //Add
+        outFileName[endIndex] = '/';
+        outFileName[++endIndex] = 'm';
+        outFileName[++endIndex] = 'y';
+        outFileName[++endIndex] = 'o';
+        outFileName[++endIndex] = 'u';
+        outFileName[++endIndex] = 't';
+        outFileName[++endIndex] = 'p';
+        outFileName[++endIndex] = 'u';
+        outFileName[++endIndex] = 't';
 
         //Initialize loop variables
         i = 0;
-        size = 10;
+        size = ++endIndex;
 
         //Loop through all of digit characters from input file name
         for (i; i < 5; ++i) {
             if (indexStr[i] != 0x0) {
-                outStr[size] = indexStr[i];
+                outFileName[size] = indexStr[i];
                 ++size;
             }
         }
 
-        //Allocate memory in heap so string  safely and defnitely persists after function returns
-        char *output = (char *) malloc(sizeof(char) * (count + 14 + 1));
+        outFileName[size] = '.';
+        outFileName[++size] = 't';
+        outFileName[++size] = 'x';
+        outFileName[++size] = 't';
+        outFileName[++size] = 0x0;
 
-        //Append the file extension
-        size = count + 10;
-        outStr[size] = '.';
-        outStr[++size] = 't';
-        outStr[++size] = 'x';
-        outStr[++size] = 't';
-        outStr[++size] = 0x0;
+        //Allocate memory in heap so string  safely and defnitely persists after function returns
+        char *output = (char *) malloc(sizeof(char) * (size));
 
         //Copy the contents of the output array to a heap allocated memory locations
-        strcpy(output, outStr);
+        strcpy(output, outFileName);
 
         return output;
 
