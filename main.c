@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <errno.h>
 
 #define MAX_WORD_LENGTH 20
 #define SCANF_STRING_LENGTH_PREP(S) "%" #S "s"
@@ -117,14 +118,8 @@ void printAndDelete(str_node **node_, FILE*fp) {
         printAndDelete(&((*node_)->left),fp);
     }
 
-    char* newLine;
-
     //Determine what OS is running to handle carriage return differently
-#ifdef _WIN32
-    newLine = "\r\n";
-#else
-    newLine = "\n";
-#endif
+    char* newLine = "\n";
 
     //Write word to the file
     fprintf(fp,"%s %s", (*node_)->word, newLine);
@@ -304,26 +299,15 @@ int main(int argc, char **argv) {
     char*outfileName;
     outfileName = generateOutputFileName(argv[1]);
 
+    //Remove outputfile if already exists
+    remove(outfileName);
+
+    //Open in append mode to not overwrite previous writes in recursive calls
+    FILE*ofp = fopen(outfileName, "a");
+
     if(outfileName != NULL) {
         //Free the memory associated with the file path string, as it is no longer needed
         free(outfileName);
-    }
-
-    //Open output file in read-only mode just to determine if file exists
-    FILE*ofp = fopen(outfileName, "r");
-
-    //Determine if the output file already exists, if so delete it
-    if (ofp){
-        //Close and Delete file
-        fclose(ofp);
-        remove(outfileName);
-
-        //Open the file in append mode so that recursive calls don't overwrite previous file writes
-        ofp = fopen(outfileName, "a");
-
-    }else{
-        //file doesn't exists, so open the file in append mode so that recursive calls don't overwrite previous file writes
-        ofp = fopen(outfileName, "a");
     }
 
     if (root == NULL) {
