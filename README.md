@@ -13,9 +13,10 @@ The **binary tree** was implemented with the following simple node structure:
 	};
 
 The count maintains the occurrences of the given words. The left and right pointers point to the left and right branches of the binary tree. 
-The program prints (post order traversal) all of the words and their associated occurrences from the given input file to a text file (e.g. **.\myoutput01**), which matches the index of the input file. An example snippet from the output of the program is seen below:
+The program prints (post order traversal) all of the words and their associated occurrences from the given input file to a text file (e.g. **.\myoutput01**), which matches the index of the input file. 
 
-	Program Output:
+An example snippet from the output of the program is seen below:
+
 		aid 1
 		all 1
 		come 1
@@ -28,7 +29,7 @@ The program prints (post order traversal) all of the words and their associated 
 		party 1
 		the 2
 		their 1
-		time1
+		time 1
 		to 2
 
 The program handles many common error cases: corrupt, missing, or incorrect file paths, and not enough memory due to large input sizes. It also expands further on possible inputs than outlined in the [assignment](https://github.com/ivogeorg/msl-clang-001).
@@ -52,8 +53,8 @@ If you encounter a bug, please read and determine if the problem or idea is not 
 
 ### Future Considerations and Limitations:
 
-As the program was written, it allows for the potential for grossly unbalanced binary trees, which expose inefficiencies in traversing and returning the word list in lexographical order. To improve this program, input could be taken and manipulated in "chunks" of words, instead of individually. These chunks could be randomized or sorted to provide a more balanced tree structure. However, future revisions to this program would analyze if a binary tree is the most suitable data structure. 
+As the program was written, it allows for the potential for grossly unbalanced binary trees, which expose inefficiencies in traversing and returning the word list in lexicographical order. To improve this program, input could be taken and manipulated in "chunks" of words, instead of individually. These chunks could be randomized or sorted to provide a more balanced tree structure. However, future revisions to this program would analyze if a binary tree is the most suitable data structure. 
 
 ### Creators:
 
-This project was made possible by the joint efforts of **Brett Gedvilas, Joshua McAllister,Rachel Popo, and David Ward.**
+This project was made possible by the joint efforts of **Brett Gedvilas, Joshua McAllister, Rachel Popo, and David Ward.**
