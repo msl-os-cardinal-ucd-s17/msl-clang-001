@@ -122,7 +122,7 @@ void printAndDelete(str_node **node_, FILE*fp) {
     char* newLine = "\n";
 
     //Write word to the file
-    fprintf(fp,"%s %s", (*node_)->word, newLine);
+    fprintf(fp,"%s %s %d %s", (*node_)->word, " ", (*node_)->count, newLine);
 
     // Try to visit right branch
     if ((*node_)->right != NULL) {
